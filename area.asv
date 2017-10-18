@@ -1,0 +1,40 @@
+%OTSU'S
+close all;
+clear;
+clc;
+
+I = imread('bife.JPG');
+%contar la cantidad de pixeles negros
+I = I(:,:,2);
+pixeles_fondo = numel(find(I>=100));
+pixeles_fondo
+%%
+GT = imread('bife.JPG');
+
+level = graythresh(I);
+BW = im2bw(I,level);
+level2 = graythresh(I(BW));
+BW2 = im2bw(I,level2);
+
+mat = [1 0 
+pixeles_ojo = numel(find(BW2))
+pixeles_fondo - pixeles_ojo
+%filtrada = medfilt2(BW2, [100 100]);
+%%
+%mostrar imagenes
+figure('Name','Otsu Method');
+subplot(1,3,1); imshow(BW);
+subplot(1,3,2); imshow(GT);
+subplot(1,3,3); imshow(BW2);
+
+%%
+x=207; y=176;
+distanciaIntensidad = 0.1; %0.01 0.1
+J = regiongrowing(BW2,x,y,distanciaIntensidad);
+figure('Name','Region growing');
+subplot(1,3,3);imshow(J);
+
+%%
+%contar la cantidad de pixeles negros
+amount_black_pixels=numel(find(filtrada>=0));
+amount_black_pixels
