@@ -85,10 +85,10 @@ x=243; y=213; %Semilla
 %I = imfilter(I,h);
 
 %Variar distancia
-distanciaIntensidad = 0.05; %0.01 0.1
+distanciaIntensidad = 0.07; %0.01 0.1
 J = regiongrowing(I,x,y,distanciaIntensidad); %Método
-J = medfilt2(J, [10 10]);
-J = medfilt2(J, [10 10]);
+J = medfilt2(J, [20 20]);
+
 
 %Mostrar resultados
 figure('Name','Region Growing');
