@@ -5,20 +5,23 @@ clc;
 
 %esto es conflicto
 %nueva linea
-I = imread('bife.JPG');
+I = imread('bife_opt.JPG');
 %contar la cantidad de pixeles negros
 I = I(:,:,2);
-pixeles_fondo = numel(find(I<100));
+I = double(I);
+I= (I - min(I(:))) / (max(I(:)) - min(I(:)));
+pixeles_fondo = numel(find(I>0.34));
 pixeles_fondo
+imshow(I>0.34);
 %% Umbralado con OTSU
-GT = imread('bife.JPG');
+GT = imread('bife_opt.JPG');
 
 %aplico dos veces OTSU
 level = graythresh(I);
 BW = im2bw(I,level);
 level2 = graythresh(I(BW));
 BW2 = im2bw(I,level2);
-filtrada = medfilt2(BW2, [100 100]);
+filtrada = medfilt2(BW, [4 4]);
 
 %cantidad de pixeles negros 
 %mat = [1 0 0 0]; para probar el calculo de pixeles negros
@@ -32,6 +35,38 @@ subplot(1,3,1); imshow(GT);
 %imagen con un solo filtro OTSU
 subplot(1,3,2); imshow(BW);
 %imagen con OTSU dos veces
-subplot(1,3,3); imshow(BW2);
+subplot(1,3,3); imshow(filtrada);
 
-%puto el que lee
+%%
+%Snakes
+
+
+y=[121 239 349 245 135];
+x=[216 188 218 295 273];
+P=[x(:) y(:)];
+
+% Opciones
+Options=struct;
+Options.Verbose=true;
+
+%Variar un solo valor a la vez
+Options.Alpha = 0.2; %2.0
+Options.Beta = 0.2; %0.2
+Options.Kappa = 6; %0.2 %Fuerza externa
+
+Options.Iterations=350;
+[O,J]=Snake2D(filtrada,P,Options);
+
+% Show the result
+figure('Name','Snakes');
+subplot(2,2,1); imshow(I);
+subplot(2,2,2); imshow(GT);
+subplot(2,2,3); imshow(J);
+Irgb(:,:,1)=I;
+Irgb(:,:,2)=I;
+Irgb(:,:,3)=I+J;
+subplot(2,2,4); imshow(I);
+hold on;
+plot([O(:,2);O(1,2)],[O(:,1);O(1,1)],'g');
+hold off;
+

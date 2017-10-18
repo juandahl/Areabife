@@ -1,13 +1,12 @@
 clear all;
 clc;
 
-I = imread('bife.png');
-GT = imread('bife.png');
-GT = GT(1:3340, :, 1);
+I = imread('bife.JPG');
+GT = imread('bife.JPG');
 I = double(I);
 I= (I - min(I(:))) / (max(I(:)) - min(I(:)));
 %I= I(:,:,1);
-I= I(1:3340, :, 1);
+I= I(:,:, 1);
 figure(1), imshow(I);
 
 %%
