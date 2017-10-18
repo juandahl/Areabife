@@ -31,3 +31,5 @@ subplot(1,3,1); imshow(GT);
 subplot(1,3,2); imshow(BW);
 %imagen con OTSU dos veces
 subplot(1,3,3); imshow(BW2);
+
+%puto el que lee
