@@ -12,6 +12,7 @@ I = double(I);
 I= (I - min(I(:))) / (max(I(:)) - min(I(:)));
 pixeles_fondo = numel(find(I>0.34));
 pixeles_fondo
+I = medfilt2(I, [3 3]);
 imshow(I>0.34);
 %% Umbralado con OTSU
 GT = imread('bife_opt.JPG');
@@ -21,7 +22,7 @@ level = graythresh(I);
 BW = im2bw(I,level);
 level2 = graythresh(I(BW));
 BW2 = im2bw(I,level2);
-filtrada = medfilt2(BW, [4 4]);
+filtrada = medfilt2(I, [20 20]);
 
 %cantidad de pixeles negros 
 %mat = [1 0 0 0]; para probar el calculo de pixeles negros
@@ -69,4 +70,34 @@ subplot(2,2,4); imshow(I);
 hold on;
 plot([O(:,2);O(1,2)],[O(:,1);O(1,1)],'g');
 hold off;
+
+%%
+%Region growing
+close all;
+clc;
+
+GT = imread('bife_opt.jpg');
+x=243; y=213; %Semilla
+
+%Preprocesamiento - Probar con y sin preprocesamiento
+%sigma = 3;
+%h = fspecial('gaussian',ceil(3*sigma)+1,sigma);
+%I = imfilter(I,h);
+
+%Variar distancia
+distanciaIntensidad = 0.05; %0.01 0.1
+J = regiongrowing(I,x,y,distanciaIntensidad); %Método
+J = medfilt2(J, [10 10]);
+J = medfilt2(J, [10 10]);
+
+%Mostrar resultados
+figure('Name','Region Growing');
+subplot(2,2,1); imshow(I);
+subplot(2,2,2); imshow(GT);
+subplot(2,2,3); imshow(J);
+subplot(2,2,4); 
+Irgb(:,:,1)=I;
+Irgb(:,:,2)=I;
+Irgb(:,:,3)=I+J;
+imshow(Irgb,[]);
 
