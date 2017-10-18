@@ -4,6 +4,7 @@ clear;
 clc;
 
 %esto es conflicto
+%nueva linea
 I = imread('bife.JPG');
 %contar la cantidad de pixeles negros
 I = I(:,:,2);
